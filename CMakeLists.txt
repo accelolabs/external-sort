@@ -4,4 +4,4 @@ project(external-sort VERSION 0.1.0 LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 17)
 
 add_executable(external-sort main.cpp)
-
+target_include_directories(external-sort PRIVATE lib/ src/)
