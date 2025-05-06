@@ -8,9 +8,10 @@ public:
     
     virtual ~ITape() = default;
 
+    virtual T operator--() = 0;
+    virtual T operator++() = 0;
 
-    virtual T peek() const = 0;
-    virtual T pop() = 0;
-    virtual void push(const T& value) = 0;
+    virtual T read() = 0;
+    virtual void write(const T& value) = 0;
 
 };
