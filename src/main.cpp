@@ -28,7 +28,6 @@ int main(int argc, char* argv[]) {
     const std::vector<std::string> requiredKeys = {
         "read_delay",
         "write_delay",
-        "rewind_delay",
         "shift_delay",
         "memory_limit"
     };
@@ -42,7 +41,6 @@ int main(int argc, char* argv[]) {
 
     size_t read_delay = cfg["read_delay"];
     size_t write_delay = cfg["write_delay"];
-    size_t rewind_delay = cfg["rewind_delay"];
     size_t shift_delay = cfg["shift_delay"];
     size_t memory_limit = cfg["memory_limit"];
 
@@ -56,8 +54,21 @@ int main(int argc, char* argv[]) {
     size_t element_count = text_to_tape(input_file, tmp_input_file);
     generate_zero_file(tmp_output_file, element_count);
 
-    FileTape input = FileTape(tmp_input_file, element_count);
-    FileTape output = FileTape(tmp_output_file, element_count);
+    FileTape input = FileTape({
+        tmp_input_file,
+        element_count,
+        read_delay,
+        write_delay,
+        shift_delay
+    });
+
+    FileTape output = FileTape({
+        tmp_output_file,
+        element_count,
+        read_delay,
+        write_delay,
+        shift_delay
+    });
 
     size_t n_m = memory_limit / sizeof(int32_t);
     size_t k = element_count / n_m;
@@ -68,7 +79,15 @@ int main(int argc, char* argv[]) {
     for (size_t i = 0; i < k; ++i) {
         std::string temp_tape_filename = (tmp_dir / std::to_string(i)).string() + ".tmp";
         generate_zero_file(temp_tape_filename, n_m);
-        temp_tapes.emplace_back(FileTape(temp_tape_filename, n_m));
+        temp_tapes.emplace_back(
+            FileTape({
+                temp_tape_filename,
+                n_m,
+                read_delay,
+                write_delay,
+                shift_delay
+            })
+        );
     }
 
     TapeSort::sort_tapes(input, output, memory_limit, temp_tapes);

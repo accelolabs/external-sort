@@ -3,11 +3,19 @@
 #include <cstdint>
 #include <fstream>
 #include <string>
+#include <thread>
 #include "FileTape.h"
+#include "FileTapeConfig.h"
 
 
 
-FileTape::FileTape(const std::string& filename, const size_t& tape_size) : filename(filename), tape_size(tape_size) {
+FileTape::FileTape(const FileTapeConfig& config) :
+    filename(config.filename),
+    tape_size(config.tape_size),
+    read_delay(config.read_delay),
+    write_delay(config.write_delay),
+    shift_delay(config.shift_delay)
+{
     file.open(filename, std::ios::in | std::ios::out | std::ios::binary);
     file.rdbuf()->pubsetbuf(nullptr, 0); // Disable buffering
 
@@ -21,6 +29,8 @@ FileTape::~FileTape() {
 
 
 int32_t FileTape::operator--() {
+    std::this_thread::sleep_for(std::chrono::milliseconds(shift_delay));
+
     if (current_index == 0) throw std::out_of_range("Decrement out of range.");
     --current_index;
     
@@ -31,6 +41,8 @@ int32_t FileTape::operator--() {
 
 
 int32_t FileTape::operator++() {
+    std::this_thread::sleep_for(std::chrono::milliseconds(shift_delay));
+
     if (current_index >= tape_size) throw std::out_of_range("Increment out of range.");
     ++current_index;
     
@@ -51,12 +63,16 @@ size_t FileTape::size() {
 
 
 void FileTape::rewind() {
+    std::this_thread::sleep_for(std::chrono::milliseconds(current_index * shift_delay));
+
     current_index = 0;
     seek_to_index();
 }
 
 
 int32_t FileTape::read() {
+    std::this_thread::sleep_for(std::chrono::milliseconds(read_delay));
+
     int32_t value;
 
     file.read(reinterpret_cast<char*>(&value), sizeof(int32_t));
@@ -69,6 +85,8 @@ int32_t FileTape::read() {
 
 
 void FileTape::write(const int32_t& value) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(write_delay));
+
     file.write(reinterpret_cast<const char*>(&value), sizeof(int32_t));
     seek_to_index();
 

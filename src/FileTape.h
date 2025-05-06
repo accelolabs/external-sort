@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <fstream>
 #include "../lib/ITape.h"
+#include "FileTapeConfig.h"
 
 
 class FileTape : ITape<int32_t> {
@@ -15,9 +16,14 @@ private:
     size_t tape_size;
     size_t current_index = 0;
 
+    size_t read_delay = 0;
+    size_t write_delay = 0;
+    size_t rewind_delay = 0;
+    size_t shift_delay = 0;
+
 public:
 
-    explicit FileTape(const std::string& filename, const size_t& tape_size);
+    explicit FileTape(const FileTapeConfig& config);
 
     ~FileTape();
 

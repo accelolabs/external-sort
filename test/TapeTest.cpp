@@ -2,7 +2,7 @@
 #include <fstream>
 #include <cstdio>
 #include <iostream>
-#include "src/FileTape.h"
+#include "../src/FileTape.h"
 
 
 class TapeTestSuite : public ::testing::Test {
@@ -27,7 +27,7 @@ protected:
 
 
 TEST_F(TapeTestSuite, ReadTest) {
-    FileTape tape(tape_filename, tape_size);
+    FileTape tape({tape_filename, tape_size});
 
     for (size_t i = 0; i < tape_size; ++i) {
         tape.rewind();
@@ -41,7 +41,7 @@ TEST_F(TapeTestSuite, ReadTest) {
 
 
 TEST_F(TapeTestSuite, WriteTest) {
-    FileTape tape(tape_filename, tape_size);
+    FileTape tape({tape_filename, tape_size});
 
     for (size_t i = 0; i < tape_size; ++i) {
         tape.rewind();
