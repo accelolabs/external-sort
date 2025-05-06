@@ -1,5 +1,8 @@
-#include <iostream>
+#include "src/Helpers.h"
+
 
 int main(int, char**){
-    std::cout << "Hello, from external-sort!\n";
+
+    text_to_tape("test", "tapefile");
+
 }

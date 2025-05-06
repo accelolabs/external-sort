@@ -7,7 +7,7 @@
 
 
 
-FileTape::FileTape(const std::string& filename, const size_t& tape_size) : size(tape_size) {
+FileTape::FileTape(const std::string& filename, const size_t& tape_size) : tape_size(tape_size) {
     file.open(filename, std::ios::in | std::ios::out | std::ios::binary);
     file.rdbuf()->pubsetbuf(nullptr, 0); // Disable buffering
 
@@ -31,12 +31,28 @@ int32_t FileTape::operator--() {
 
 
 int32_t FileTape::operator++() {
-    if (current_index >= size) throw std::out_of_range("Increment out of range.");
+    if (current_index >= tape_size) throw std::out_of_range("Increment out of range.");
     ++current_index;
     
     seek_to_index();
     
     return read();
+}
+
+
+size_t FileTape::index() {
+    return current_index;
+}
+
+
+size_t FileTape::size() {
+    return tape_size;
+}
+
+
+void FileTape::rewind() {
+    current_index = 0;
+    seek_to_index();
 }
 
 

@@ -11,7 +11,7 @@ class FileTape : ITape<int32_t> {
 private:
 
     mutable std::fstream file;
-    size_t size;
+    size_t tape_size;
     size_t current_index = 0;
 
 public:
@@ -30,6 +30,9 @@ public:
 
     int32_t operator--() override;
     int32_t operator++() override;
+    size_t index() override;
+    size_t size() override;
+    void rewind() override;
 
     int32_t read() override;
     void write(const int32_t& value) override;
