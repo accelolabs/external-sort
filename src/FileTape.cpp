@@ -60,6 +60,7 @@ int32_t FileTape::read() {
     int32_t value;
 
     file.read(reinterpret_cast<char*>(&value), sizeof(int32_t));
+    seek_to_index();
 
     if (!file) throw std::runtime_error("Failed to read from tape.");
 
@@ -69,6 +70,7 @@ int32_t FileTape::read() {
 
 void FileTape::write(const int32_t& value) {
     file.write(reinterpret_cast<const char*>(&value), sizeof(int32_t));
+    seek_to_index();
 
     if (!file.good()) throw std::runtime_error("Failed to write to tape.");
 }
