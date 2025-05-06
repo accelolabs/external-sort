@@ -7,11 +7,11 @@
 
 
 
-FileTape::FileTape(const std::string& filename, const size_t& tape_size) : tape_size(tape_size) {
+FileTape::FileTape(const std::string& filename, const size_t& tape_size) : filename(filename), tape_size(tape_size) {
     file.open(filename, std::ios::in | std::ios::out | std::ios::binary);
     file.rdbuf()->pubsetbuf(nullptr, 0); // Disable buffering
 
-    if (!file.is_open()) throw std::runtime_error("Tape file does not exist.");
+    if (!file.is_open()) throw std::runtime_error("Tape file" + filename + " does not exist.");
 }
 
 
@@ -62,7 +62,7 @@ int32_t FileTape::read() {
     file.read(reinterpret_cast<char*>(&value), sizeof(int32_t));
     seek_to_index();
 
-    if (!file) throw std::runtime_error("Failed to read from tape.");
+    if (!file) throw std::runtime_error("Failed to read from tape " + filename + ".");
 
     return value;
 }
@@ -72,7 +72,7 @@ void FileTape::write(const int32_t& value) {
     file.write(reinterpret_cast<const char*>(&value), sizeof(int32_t));
     seek_to_index();
 
-    if (!file.good()) throw std::runtime_error("Failed to write to tape.");
+    if (!file.good()) throw std::runtime_error("Failed to write to tape " + filename + ".");
 }
 
 

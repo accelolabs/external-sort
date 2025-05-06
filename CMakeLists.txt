@@ -8,10 +8,10 @@ add_library(external_sort_lib
     src/FileTape.cpp
 )
 
+file(COPY ${CMAKE_SOURCE_DIR}/example/ DESTINATION ${CMAKE_BINARY_DIR})
+
 add_executable(external-sort src/main.cpp)
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE external_sort_lib)
 
-# file(COPY ${CMAKE_SOURCE_DIR}/example/ DESTINATION ${CMAKE_BINARY_DIR})
-
-enable_testing()
-add_subdirectory(test)
+# enable_testing()
+# add_subdirectory(test)

@@ -11,6 +11,7 @@ class FileTape : ITape<int32_t> {
 private:
 
     mutable std::fstream file;
+    std::string filename;
     size_t tape_size;
     size_t current_index = 0;
 
@@ -24,8 +25,8 @@ public:
     FileTape(const FileTape&) = delete;
     FileTape& operator=(const FileTape&) = delete;
 
-    FileTape(FileTape&&) = delete;
-    FileTape& operator=(FileTape&&) = delete;
+    FileTape(FileTape&&) = default;
+    FileTape& operator=(FileTape&&) = default;
 
 
     int32_t operator--() override;
